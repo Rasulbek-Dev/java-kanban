@@ -10,7 +10,7 @@ public class Task {
         this.status = Status.NEW;
     }
 
-    // гетеры и сетеры
+    // геттеры и сеттеры
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public String getTitle() { return title; }
