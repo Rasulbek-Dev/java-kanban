@@ -16,7 +16,7 @@ public class Epic extends Task {
         subtaskIds.add(id);
     }
     void updateStatus(Status status) {
-        super.setStatus(status); // Используем родительский сеттер
+        super.setStatus(status);
     }
     @Override
     public void setStatus(Status status) {
