@@ -1,13 +1,13 @@
 public class Task {
-    private int id;
-    private String title;
-    private String description;
-    private Status status;
+    protected int id;
+    protected String title;
+    protected String description;
+    protected TaskStatus taskStatus;
 
     public Task(String title, String description) {
         this.title = title;
         this.description = description;
-        this.status = Status.NEW;
+        this.taskStatus = TaskStatus.NEW;
     }
 
     // геттеры и сеттеры
@@ -17,12 +17,12 @@ public class Task {
     public void setTitle(String title) { this.title = title; }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
-    public Status getStatus() { return status; }
-    public void setStatus(Status status) { this.status = status; }
+    public TaskStatus getStatus() { return taskStatus; }
+    public void setStatus(TaskStatus taskStatus) { this.taskStatus = taskStatus; }
 
     @Override
     public String toString() {
         return "Task{id=" + id + ", title='" + title + "', description='" +
-                description + "', status=" + status + "}";
+                description + "', status=" + taskStatus + "}";
     }
 }

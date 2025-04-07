@@ -15,11 +15,11 @@ public class Epic extends Task {
     public void addSubtaskId(int id) {
         subtaskIds.add(id);
     }
-    void updateStatus(Status status) {
-        super.setStatus(status);
+    void updateStatus(TaskStatus taskStatus) {
+        super.setStatus(taskStatus);
     }
     @Override
-    public void setStatus(Status status) {
+    public void setStatus(TaskStatus taskStatus) {
         System.out.println("Ошибка: статус эпика нельзя менять вручную!");
     }
 }

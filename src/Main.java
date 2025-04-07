@@ -19,9 +19,9 @@ public class Main {
         printAllTasks(manager);
 
         // изменение статусов
-        subtask1.setStatus(Status.DONE);
+        subtask1.setStatus(TaskStatus.DONE);
         manager.updateSubtask(subtask1);
-        subtask2.setStatus(Status.IN_PROGRESS);
+        subtask2.setStatus(TaskStatus.IN_PROGRESS);
         manager.updateSubtask(subtask2);
 
         System.out.println("\n=== После изменения статусов ===");

@@ -88,7 +88,7 @@ public class TaskManager {
         List<Subtask> subs = getSubtasksByEpic(epic.getId());
 
         if (subs.isEmpty()) {
-            epic.updateStatus(Status.NEW);
+            epic.updateStatus(TaskStatus.NEW);
             return;
         }
 
@@ -96,16 +96,16 @@ public class TaskManager {
         int doneCount = 0;
 
         for (Subtask sub : subs) {
-            if (sub.getStatus() == Status.NEW) newCount++;
-            if (sub.getStatus() == Status.DONE) doneCount++;
+            if (sub.getStatus() == TaskStatus.NEW) newCount++;
+            if (sub.getStatus() == TaskStatus.DONE) doneCount++;
         }
 
         if (doneCount == subs.size()) {
-            epic.updateStatus(Status.DONE);
+            epic.updateStatus(TaskStatus.DONE);
         } else if (newCount == subs.size()) {
-            epic.updateStatus(Status.NEW);
+            epic.updateStatus(TaskStatus.NEW);
         } else {
-            epic.updateStatus(Status.IN_PROGRESS);
+            epic.updateStatus(TaskStatus.IN_PROGRESS);
         }
     }
 }
