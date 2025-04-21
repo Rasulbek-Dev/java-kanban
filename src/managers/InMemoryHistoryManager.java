@@ -1,3 +1,7 @@
+package managers;
+
+import model.Task;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +16,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         remove(task.getId());
 
         if (history.size() >= MAX_HISTORY_SIZE) {
-            history.remove(0);
+            history.removeFirst();
         }
 
         history.add(task);

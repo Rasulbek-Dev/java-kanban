@@ -1,16 +1,20 @@
+package tests;
+
+import model.Epic;
+import model.TaskStatus;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EpicTest {
     @Test
     void newEpicShouldHaveEmptySubtasks() {
-        Epic epic = new Epic("Epic", "Description");
+        Epic epic = new Epic("model.Epic", "Description");
         assertTrue(epic.getSubtaskIds().isEmpty(), "Новый эпик должен иметь пустой список подзадач");
     }
 
     @Test
     void shouldNotAllowManualStatusChange() {
-        Epic epic = new Epic("Epic", "Description");
+        Epic epic = new Epic("model.Epic", "Description");
         epic.setStatus(TaskStatus.DONE);
 
         assertNotEquals(TaskStatus.DONE, epic.getStatus(),

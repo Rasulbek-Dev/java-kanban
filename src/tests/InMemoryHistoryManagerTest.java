@@ -1,3 +1,8 @@
+package tests;
+
+import managers.HistoryManager;
+import managers.Managers;
+import model.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,7 +14,7 @@ class InMemoryHistoryManagerTest {
     @BeforeEach
     void setUp() {
         history = Managers.getDefaultHistory();
-        task = new Task("Task", "Description");
+        task = new Task("model.Task", "Description");
         task.setId(1);
     }
 
@@ -22,7 +27,7 @@ class InMemoryHistoryManagerTest {
     @Test
     void shouldLimitHistorySize() {
         for (int i = 1; i <= 15; i++) {
-            Task t = new Task("Task " + i, "Description");
+            Task t = new Task("model.Task " + i, "Description");
             t.setId(i);
             history.add(t);
         }
