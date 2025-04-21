@@ -16,7 +16,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         remove(task.getId());
 
         if (history.size() >= MAX_HISTORY_SIZE) {
-            history.removeFirst();
+            history.remove(0); // ArrayList не имеет метода removeFirst()
         }
 
         history.add(task);

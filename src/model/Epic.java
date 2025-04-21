@@ -17,7 +17,7 @@ public class Epic extends Task {
     public void addSubtaskId(int id) {
         subtaskIds.add(id);
     }
-    void updateStatus(TaskStatus taskStatus) {
+   public void updateStatus(TaskStatus taskStatus) {
         super.setStatus(taskStatus);
     }
     @Override
