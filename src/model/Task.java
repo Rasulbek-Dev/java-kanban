@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Objects;
+
 public class Task {
     protected int id;
     protected String title;
@@ -13,7 +14,15 @@ public class Task {
         this.taskStatus = TaskStatus.NEW;
     }
 
-    // геттеры и сеттеры
+    // Конструктор копирования
+    public Task(Task other) {
+        this.id = other.id;
+        this.title = other.title;
+        this.description = other.description;
+        this.taskStatus = other.taskStatus;
+    }
+
+    // Геттеры и сеттеры
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public String getTitle() { return title; }
@@ -25,8 +34,10 @@ public class Task {
 
     @Override
     public String toString() {
-        return "model.Task{id=" + id + ", title='" + title + "', description='" +
-                description + "', status=" + taskStatus + "}";
+        return "Task{id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + taskStatus + '}';
     }
 
     @Override
