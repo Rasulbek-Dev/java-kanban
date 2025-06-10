@@ -3,10 +3,9 @@ package managers;
 import model.Epic;
 import model.Subtask;
 import model.Task;
-
 import java.util.List;
 
-public interface TaskManager{
+public interface TaskManager {
 
     Task createTask(Task task);
 
@@ -16,7 +15,7 @@ public interface TaskManager{
 
     Task getTask(int id);
 
-    void updateTask(Task task); // Добавлен новый метод
+    void updateTask(Task task);
 
     Epic createEpic(Epic epic);
 
