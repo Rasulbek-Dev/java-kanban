@@ -6,6 +6,7 @@ import model.Task;
 import java.util.List;
 
 public interface TaskManager {
+
     Task createTask(Task task);
 
     List<Task> getAllTasks();
