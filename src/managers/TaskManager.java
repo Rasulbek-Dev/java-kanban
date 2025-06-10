@@ -6,7 +6,7 @@ import model.Task;
 
 import java.util.List;
 
-public interface TaskManager {
+public interface TaskManager{
 
     Task createTask(Task task);
 
@@ -34,5 +34,4 @@ public interface TaskManager {
 
     Subtask getSubtask(int id);
 
-    List<Task> getHistory();
-}
+    List<Task> getHistory();}
