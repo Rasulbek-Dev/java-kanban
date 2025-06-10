@@ -14,7 +14,6 @@ public class Task {
         this.taskStatus = TaskStatus.NEW;
     }
 
-    // Конструктор копирования
     public Task(Task other) {
         this.id = other.id;
         this.title = other.title;
@@ -23,21 +22,37 @@ public class Task {
     }
 
     // Геттеры и сеттеры
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
-    public void setId(int id) { this.id = id; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getTitle() { return title; }
+    public String getTitle() {
+        return title;
+    }
 
-    public void setTitle(String title) { this.title = title; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public String getDescription() { return description; }
+    public String getDescription() {
+        return description;
+    }
 
-    public void setDescription(String description) { this.description = description; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public TaskStatus getStatus() { return taskStatus; }
+    public TaskStatus getStatus() {
+        return taskStatus;
+    }
 
-    public void setStatus(TaskStatus taskStatus) { this.taskStatus = taskStatus; }
+    public void setStatus(TaskStatus taskStatus) {
+        this.taskStatus = taskStatus;
+    }
 
     @Override
     public String toString() {
