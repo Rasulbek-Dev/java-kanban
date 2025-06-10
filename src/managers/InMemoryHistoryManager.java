@@ -38,8 +38,8 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void remove(int id) {
         Node node = historyMap.get(id);
         if (node != null) {
-            removeNode(node); // Удаляем ноду из списка
-            historyMap.remove(id); // Удаляем из мапы
+            removeNode(node);
+            historyMap.remove(id);
         }
     }
 

@@ -40,7 +40,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTask(int id) {
         Task task = tasks.get(id);
-        return task != null ? new Task(task) : null; // Возвращаем копию
+        return task != null ? new Task(task) : null;
     }
 
     @Override
@@ -59,6 +59,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Epic> getAllEpics() {
+
         return new ArrayList<>(epics.values());
     }
 
