@@ -1,0 +1,7 @@
+./tests/EpicIntegrationTest.java
+./tests/EpicTest.java
+./tests/InMemoryHistoryManagerTest.java
+./tests/InMemoryTaskManagerTest.java
+./tests/ManagersTest.java
+./tests/SubtaskTest.java
+./tests/TaskTest.java
