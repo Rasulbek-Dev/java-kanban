@@ -1,4 +1,4 @@
-package tests;
+package test;
 
 import managers.Managers;
 import managers.TaskManager;
@@ -21,7 +21,7 @@ class EpicIntegrationTest {
     }
 
     @Test
-    void epicStatusShouldUpdateWhenSubtaskChanged() {
+    void    epicStatusShouldUpdateWhenSubtaskChanged() {
         Subtask subtask = manager.createSubtask(new Subtask("Subtask", "Description", epic.getId()));
 
 
