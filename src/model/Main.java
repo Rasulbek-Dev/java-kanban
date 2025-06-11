@@ -35,7 +35,7 @@ public class Main {
         manager.getEpic(epic1.getId());
         manager.getSubtask(subtask1.getId());
         manager.getTask(task2.getId());
-        manager.getTask(task1.getId()); // Дубликат
+        manager.getTask(task1.getId());
 
         printAllTasks(manager);
 
