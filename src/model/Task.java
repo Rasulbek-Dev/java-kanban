@@ -1,7 +1,6 @@
 package model;
 
 import java.util.Objects;
-
 public class Task {
     protected int id;
     protected String title;
@@ -14,52 +13,20 @@ public class Task {
         this.taskStatus = TaskStatus.NEW;
     }
 
-    public Task(Task other) {
-        this.id = other.id;
-        this.title = other.title;
-        this.description = other.description;
-        this.taskStatus = other.taskStatus;
-    }
-
-    // Геттеры и сеттеры
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public TaskStatus getStatus() {
-        return taskStatus;
-    }
-
-    public void setStatus(TaskStatus taskStatus) {
-        this.taskStatus = taskStatus;
-    }
+    // геттеры и сеттеры
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+    public TaskStatus getStatus() { return taskStatus; }
+    public void setStatus(TaskStatus taskStatus) { this.taskStatus = taskStatus; }
 
     @Override
     public String toString() {
-        return "Task{id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", status=" + taskStatus + '}';
+        return "model.Task{id=" + id + ", title='" + title + "', description='" +
+                description + "', status=" + taskStatus + "}";
     }
 
     @Override
