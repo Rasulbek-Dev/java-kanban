@@ -7,7 +7,13 @@ public class Epic extends Task {
     private List<Integer> subtaskIds = new ArrayList<>();
 
     public Epic(String title, String description) {
+
         super(title, description);
+    }
+
+    public Epic(Epic other) {
+        super(other);
+        this.subtaskIds = new ArrayList<>(other.subtaskIds);
     }
 
     public List<Integer> getSubtaskIds() {
@@ -17,11 +23,14 @@ public class Epic extends Task {
     public void addSubtaskId(int id) {
         subtaskIds.add(id);
     }
-   public void updateStatus(TaskStatus taskStatus) {
+
+    public void updateStatus(TaskStatus taskStatus) {
         super.setStatus(taskStatus);
     }
+
     @Override
     public void setStatus(TaskStatus taskStatus) {
         System.out.println("Ошибка: статус эпика нельзя менять вручную!");
+
     }
 }
