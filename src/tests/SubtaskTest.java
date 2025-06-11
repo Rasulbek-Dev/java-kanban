@@ -1,4 +1,4 @@
-package test;
+package tests;
 
 import model.Subtask;
 import org.junit.jupiter.api.Test;
