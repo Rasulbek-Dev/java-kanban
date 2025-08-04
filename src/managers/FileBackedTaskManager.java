@@ -1,8 +1,14 @@
 package managers;
 
-import model.*;
+import model.Epic;
+import model.Subtask;
+import model.Task;
+import model.TaskStatus;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -107,7 +113,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     manager.createTask(task);
                 }
             }
-          InMemoryTaskManager.nextId = maxId + 1;
+            InMemoryTaskManager.nextId = maxId + 1;
 
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка загрузки", e);
