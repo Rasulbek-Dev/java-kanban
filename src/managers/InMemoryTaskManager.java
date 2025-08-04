@@ -11,11 +11,12 @@ import java.util.List;
 import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
-    private int nextId = 1;
+    protected static int nextId = 1;
     private final Map<Integer, Task> tasks = new HashMap<>();
     private final Map<Integer, Epic> epics = new HashMap<>();
     private final Map<Integer, Subtask> subtasks = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory();
+
 
     @Override
     public Task createTask(Task task) {
@@ -41,7 +42,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Task getTask(int id) {
         Task task = tasks.get(id);
         if (task != null) {
-            historyManager.add(task); // длбавляем задачу в историю
+            historyManager.add(task);
             return new Task(task);
         }
         return null;
@@ -127,6 +128,10 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
         return result;
+    }
+
+    public List<Subtask> getAllSubtasks() {
+        return new ArrayList<>(subtasks.values());
     }
 
     @Override
