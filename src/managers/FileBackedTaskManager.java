@@ -71,7 +71,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    
     private void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("id,type,name,status,description,epic\n");
@@ -90,10 +89,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-
     public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
-
         try {
             String content = Files.readString(file.toPath());
             String[] lines = content.split("\n");
@@ -106,7 +103,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 if (task.getId() > maxId) {
                     maxId = task.getId();
                 }
-
                 if (task instanceof Epic) {
                     manager.createEpic((Epic) task);
                 } else if (task instanceof Subtask) {
@@ -116,11 +112,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 }
             }
             InMemoryTaskManager.nextId = maxId + 1;
-
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка загрузки", e);
         }
-
         return manager;
     }
 
