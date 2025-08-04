@@ -5,7 +5,6 @@ import model.*;
 import java.io.*;
 import java.nio.file.Files;
 
-
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
 
@@ -66,7 +65,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-
     private void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("id,type,name,status,description,epic\n");
@@ -84,7 +82,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             throw new ManagerSaveException("Ошибка сохранения", e);
         }
     }
-
 
     public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
@@ -118,7 +115,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
         return manager;
     }
-    
+
     @Override
     public Task createTask(Task task) {
         Task createdTask = super.createTask(task);
