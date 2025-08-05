@@ -90,6 +90,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
+
         try {
             String content = Files.readString(file.toPath());
             String[] lines = content.split("\n");
@@ -115,10 +116,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             throw new ManagerSaveException("Ошибка загрузки", e);
         }
         return manager;
+
     }
 
-
-    
     @Override
     public Task createTask(Task task) {
         Task createdTask = super.createTask(task);
