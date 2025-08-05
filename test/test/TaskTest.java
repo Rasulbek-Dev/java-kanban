@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class TaskTest {
-    
+
     @Test
     void tasksWithSameIdShouldBeEqual() {
         Task task1 = new Task("Task 1", "Description");
