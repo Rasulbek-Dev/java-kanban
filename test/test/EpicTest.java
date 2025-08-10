@@ -3,9 +3,12 @@ package test;
 import model.Epic;
 import model.TaskStatus;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class EpicTest {
+
     @Test
     void newEpicShouldHaveEmptySubtasks() {
         Epic epic = new Epic("model.Epic", "Description");
