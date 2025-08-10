@@ -1,10 +1,17 @@
 package model;
 
+import managers.TaskType;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
     private List<Integer> subtaskIds = new ArrayList<>();
+
+    @Override
+    public TaskType getType() {
+        return TaskType.EPIC;
+    }
 
     public Epic(String title, String description) {
 

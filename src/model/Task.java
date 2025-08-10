@@ -1,5 +1,7 @@
 package model;
 
+import managers.TaskType;
+
 import java.util.Objects;
 
 public class Task {
@@ -21,7 +23,6 @@ public class Task {
         this.taskStatus = other.taskStatus;
     }
 
-    // Геттеры и сеттеры
     public int getId() {
         return id;
     }
@@ -52,6 +53,10 @@ public class Task {
 
     public void setStatus(TaskStatus taskStatus) {
         this.taskStatus = taskStatus;
+    }
+
+    public TaskType getType() {
+        return TaskType.TASK;
     }
 
     @Override

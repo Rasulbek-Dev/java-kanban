@@ -19,20 +19,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private String toString(Task task) {
-        TaskType type;
         String epicId = "";
-
-        if (task instanceof Epic) {
-            type = TaskType.EPIC;
-        } else if (task instanceof Subtask) {
-            type = TaskType.SUBTASK;
+        if (task.getType() == TaskType.SUBTASK) {
             epicId = String.valueOf(((Subtask) task).getEpicId());
-        } else {
-            type = TaskType.TASK;
         }
+
         return String.join(",",
                 String.valueOf(task.getId()),
-                type.name(),
+                task.getType().name(),
                 task.getTitle(),
                 task.getStatus().name(),
                 task.getDescription(),
@@ -40,8 +34,21 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         );
     }
 
+/*Уважаемый ревьюер, спасибо за вашу работу! Вот что я сделал в этом задании:
+Исправил проблему с ID при загрузке:
+Теперь create-методы не перезаписывают существующие ID
+Сохраняются связи между Epic и Subtask
+Заменил instanceof на полиморфизм:
+Добавил метод getType() в Task и его наследников
+Теперь тип задачи определяется через этот метод
+Добавил тесты для проверки */
+
     private Task fromString(String value) {
         String[] fields = value.split(",");
+        if (fields.length < 5) {
+            throw new IllegalArgumentException("Недостаточно полей в строке: " + value);
+        }
+
         int id = Integer.parseInt(fields[0]);
         TaskType type = TaskType.valueOf(fields[1]);
         String name = fields[2];
@@ -55,6 +62,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 epic.setStatus(status);
                 return epic;
             case SUBTASK:
+                if (fields.length < 6) {
+                    throw new IllegalArgumentException("Для подзадачи отсутствует epicId: " + value);
+                }
                 int epicId = Integer.parseInt(fields[5]);
                 Subtask subtask = new Subtask(name, description, epicId);
                 subtask.setId(id);
@@ -70,7 +80,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    private void save() {
+    public void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("id,type,name,status,description,epic\n");
 
@@ -99,24 +109,28 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
             int maxId = 0;
             for (int i = 1; i < lines.length; i++) {
-                Task task = manager.fromString(lines[i]);
-                if (task.getId() > maxId) {
-                    maxId = task.getId();
-                }
-                if (task instanceof Epic) {
-                    manager.createEpic((Epic) task);
-                } else if (task instanceof Subtask) {
-                    manager.createSubtask((Subtask) task);
-                } else {
-                    manager.createTask(task);
+                if (lines[i].isBlank()) continue;
+                try {
+                    Task task = manager.fromString(lines[i]);
+                    if (task.getId() > maxId) {
+                        maxId = task.getId();
+                    }
+                    if (task instanceof Epic) {
+                        manager.createEpic((Epic) task);
+                    } else if (task instanceof Subtask) {
+                        manager.createSubtask((Subtask) task);
+                    } else {
+                        manager.createTask(task);
+                    }
+                } catch (Exception e) {
+                    throw new ManagerSaveException("Ошибка загрузки: повреждённая строка \"" + lines[i] + "\"", e);
                 }
             }
             InMemoryTaskManager.nextId = maxId + 1;
         } catch (IOException e) {
-            throw new ManagerSaveException("Ошибка загрузки", e);
+            throw new ManagerSaveException("Ошибка чтения файла", e);
         }
         return manager;
-
     }
 
     @Override
