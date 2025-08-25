@@ -5,15 +5,9 @@ import managers.TaskType;
 public class Subtask extends Task {
     private int epicId;
 
-
     public Subtask(String title, String description, int epicId) {
         super(title, description);
         this.epicId = epicId;
-    }
-
-    @Override
-    public TaskType getType() {
-        return TaskType.SUBTASK;
     }
 
     public Subtask(Subtask other) {
@@ -21,16 +15,29 @@ public class Subtask extends Task {
         this.epicId = other.epicId;
     }
 
-    public int getEpicId() {
+    @Override
+    public TaskType getType() {
+        return TaskType.SUBTASK;
+    }
 
+    public int getEpicId() {
         return epicId;
+    }
+
+    public void setEpicId(int epicId) {
+        this.epicId = epicId;
     }
 
     @Override
     public String toString() {
         return "Subtask{id=" + getId() +
                 ", title='" + getTitle() + '\'' +
+                ", description='" + getDescription() + '\'' +
+                ", status=" + getStatus() +
                 ", epicId=" + epicId +
-                ", status=" + getStatus() + '}';
+                ", duration=" + (getDuration() != null ? getDuration().toMinutes() : "null") +
+                ", startTime=" + getStartTime() +
+                ", endTime=" + getEndTime() +
+                '}';
     }
 }
