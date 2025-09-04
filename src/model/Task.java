@@ -28,7 +28,6 @@ public class Task {
         this.duration = other.duration;
         this.startTime = other.startTime;
     }
-
     public int getId() {
         return id;
     }

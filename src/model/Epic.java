@@ -50,27 +50,27 @@ public class Epic extends Task {
         return duration;
     }
 
-    @Override
-    public void setDuration(Duration duration) {
-        this.duration = duration;
-    }
+   public void setCalculatedDuration(Duration duration) {
+       this.duration = duration;
+   }
 
     @Override
     public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
-    }
+   public void setCalculatedEndTime(LocalDateTime endTime) {
+       this.endTime = endTime;
+   }
 
     public void updateStatus(TaskStatus taskStatus) {
         super.setStatus(taskStatus);
     }
 
     @Override
-    public void setStatus(TaskStatus taskStatus) {
-        System.out.println("Ошибка: статус эпика нельзя менять вручную!");
+    public void setStatus(TaskStatus status) {
+        // Статус эпика рассчитывается автоматически
+        System.out.println("Предупреждение: статус эпика нельзя менять вручную!");
     }
 
     @Override
