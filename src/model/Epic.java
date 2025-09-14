@@ -10,17 +10,22 @@ import java.util.List;
 public class Epic extends Task {
     private List<Integer> subtaskIds = new ArrayList<>();
     private LocalDateTime endTime;
-    private Duration duration;
 
     public Epic(String title, String description) {
         super(title, description);
+        this.endTime = null;
+    }
+
+    public Epic(int id, String title, String description, TaskStatus status,
+                Duration duration, LocalDateTime startTime, LocalDateTime endTime) {
+        super(id, title, description, status, duration, startTime);
+        this.endTime = endTime;
     }
 
     public Epic(Epic other) {
         super(other);
         this.subtaskIds = new ArrayList<>(other.subtaskIds);
         this.endTime = other.endTime;
-        this.duration = other.duration;
     }
 
     @Override
@@ -41,35 +46,20 @@ public class Epic extends Task {
     }
 
     @Override
-    public LocalDateTime getStartTime() {
-        return super.getStartTime();
-    }
-
-    @Override
-    public Duration getDuration() {
-        return duration;
-    }
-
-   public void setCalculatedDuration(Duration duration) {
-       this.duration = duration;
-   }
-
-    @Override
     public LocalDateTime getEndTime() {
         return endTime;
     }
 
-   public void setCalculatedEndTime(LocalDateTime endTime) {
-       this.endTime = endTime;
-   }
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
 
-    public void updateStatus(TaskStatus taskStatus) {
-        super.setStatus(taskStatus);
+    public void updateStatus(TaskStatus status) {
+        this.taskStatus = status;
     }
 
     @Override
     public void setStatus(TaskStatus status) {
-        // Статус эпика рассчитывается автоматически
         System.out.println("Предупреждение: статус эпика нельзя менять вручную!");
     }
 

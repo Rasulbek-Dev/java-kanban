@@ -15,25 +15,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/*Уважаемый ревьюер!
-Большое спасибо за время и внимание к моей работе. В этом спринте я реализовал всю требуемую функциональность:
-✅ Что было сделано:
-Добавлены новые поля duration, startTime и метод getEndTime() во все типы задач
-Реализован расчет времени для Epic на основе подзадач (сумма duration, минимальный startTime, максимальный endTime)
-Реализован метод getPrioritizedTasks() с использованием TreeSet для эффективности O(n)
-Добавлена проверка пересечений задач с использованием Stream API и математического метода наложения отрезков
-Обновлена сериализация/десериализация для работы с новыми полями
-Написаны комплексные тесты включая абстрактный класс TaskManagerTest
-Покрыты все граничные случаи для статусов Epic и истории
-🔧 Технические детали:
-Использован TreeSet для хранения приоритетных задач
-Реализована проверка пересечений до добавления задач в менеджер
-Для истории используется кастомная linked list реализация
-Все методы защищены от null-значений времени
-📝 Примечание:
-Некоторые тесты могут быть неидеальными из-за нехватки времени перед дедлайном, но основная функциональность работает корректно. Готов доработать по вашим замечаниям!
-Буду благодарен за обратную связь и готов оперативно внести правки!*/
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
 
@@ -41,87 +22,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    private String toString(Task task) {
-        String epicId = "";
-        if (task.getType() == TaskType.SUBTASK) {
-            epicId = String.valueOf(((Subtask) task).getEpicId());
-        }
-
-        return String.join(",",
-                String.valueOf(task.getId()),
-                task.getType().name(),
-                task.getTitle(),
-                task.getStatus().name(),
-                task.getDescription(),
-                task.getDuration() != null ? String.valueOf(task.getDuration().toMinutes()) : "",
-                task.getStartTime() != null ? task.getStartTime().toString() : "",
-                epicId
-        );
-    }
-
-    private Task fromString(String value) {
-        String[] fields = value.split(",");
-        if (fields.length < 5) {
-            throw new IllegalArgumentException("Недостаточно полей в строке: " + value);
-        }
-
-        int id = Integer.parseInt(fields[0]);
-        TaskType type = TaskType.valueOf(fields[1]);
-        String name = fields[2];
-        TaskStatus status = TaskStatus.valueOf(fields[3]);
-        String description = fields[4];
-
-        Duration duration = null;
-        if (fields.length > 5 && !fields[5].isEmpty()) {
-            duration = Duration.ofMinutes(Long.parseLong(fields[5]));
-        }
-
-        LocalDateTime startTime = null;
-        if (fields.length > 6 && !fields[6].isEmpty()) {
-            startTime = LocalDateTime.parse(fields[6]);
-        }
-
-        switch (type) {
-            case EPIC:
-                Epic epic = new Epic(name, description);
-                epic.setId(id);
-                epic.setStatus(status);
-                return epic;
-            case SUBTASK:
-                if (fields.length < 8) {
-                    throw new IllegalArgumentException("Для подзадачи отсутствует epicId: " + value);
-                }
-                int epicId = Integer.parseInt(fields[7]);
-                Subtask subtask = new Subtask(name, description, epicId);
-                subtask.setId(id);
-                subtask.setStatus(status);
-                subtask.setDuration(duration);
-                subtask.setStartTime(startTime);
-                return subtask;
-            case TASK:
-                Task task = new Task(name, description);
-                task.setId(id);
-                task.setStatus(status);
-                task.setDuration(duration);
-                task.setStartTime(startTime);
-                return task;
-            default:
-                throw new IllegalArgumentException("Неизвестный тип задачи");
-        }
-    }
-
-    public void save() {
+    private void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write("id,type,name,status,description,duration,startTime,epic\n");
+            writer.write(CsvFormat.getHeader() + "\n");
 
             for (Task task : getAllTasks()) {
-                writer.write(toString(task) + "\n");
+                writer.write(CsvFormat.toString(task) + "\n");
             }
             for (Epic epic : getAllEpics()) {
-                writer.write(toString(epic) + "\n");
+                writer.write(CsvFormat.toString(epic) + "\n");
             }
             for (Subtask subtask : getAllSubtasks()) {
-                writer.write(toString(subtask) + "\n");
+                writer.write(CsvFormat.toString(subtask) + "\n");
             }
 
             writer.write("\n");
@@ -175,7 +87,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             for (int i = 1; i < emptyLineIndex; i++) {
                 if (lines[i].isBlank()) continue;
                 try {
-                    Task task = manager.fromString(lines[i]);
+                    Task task = CsvFormat.fromString(lines[i]);
                     if (task.getId() > maxId) {
                         maxId = task.getId();
                     }
@@ -197,10 +109,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
             InMemoryTaskManager.nextId = maxId + 1;
 
-            for (Epic epic : manager.epics.values()) {
-                manager.updateEpicStatus(epic);
-                manager.updateEpicTime(epic);
-            }
+            manager.updateAllEpics();
 
             if (emptyLineIndex != -1 && emptyLineIndex + 1 < lines.length) {
                 String historyLine = lines[emptyLineIndex + 1];

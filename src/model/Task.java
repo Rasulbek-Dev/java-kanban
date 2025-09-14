@@ -18,6 +18,18 @@ public class Task {
         this.title = title;
         this.description = description;
         this.taskStatus = TaskStatus.NEW;
+        this.duration = Duration.ofMinutes(5);
+        this.startTime = LocalDateTime.now();
+    }
+
+    public Task(int id, String title, String description, TaskStatus status,
+                Duration duration, LocalDateTime startTime) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.taskStatus = status;
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
     public Task(Task other) {
@@ -28,6 +40,7 @@ public class Task {
         this.duration = other.duration;
         this.startTime = other.startTime;
     }
+
     public int getId() {
         return id;
     }
