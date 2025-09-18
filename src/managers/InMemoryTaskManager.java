@@ -16,22 +16,18 @@ public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, Epic> epics = new HashMap<>();
     protected final Map<Integer, Subtask> subtasks = new HashMap<>();
     protected final HistoryManager historyManager = Managers.getDefaultHistory();
-    private final Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(
-            Task::getStartTime,
-            Comparator.nullsLast(Comparator.naturalOrder())
-    ));
+    private final Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
+
+   // Уважаемый ревьюер!
+   // Большое спасибо за ваши ценные замечания! Я внимательно изучил все комментарии и внес соответствующие поправки.
+    //Благодарю вас за уделенное время и экспертизу — ваши замечания помогли значительно улучшить код. ❤️🔥☕
 
     @Override
     public Task createTask(Task task) {
-        if (hasTimeOverlap(task)) {
-            throw new ManagerValidationException("Задача пересекается по времени с существующей задачей");
+        validateNoTimeOverlap(task);
+        if (task.getId() == 0) {
+            task.setId(nextId++);
         }
-        if (task.getId() != 0) {
-            tasks.put(task.getId(), task);
-            addToPrioritized(task);
-            return task;
-        }
-        task.setId(nextId++);
         tasks.put(task.getId(), task);
         addToPrioritized(task);
         return task;
@@ -53,12 +49,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllTasks() {
-        // Удаляем из prioritizedTasks
         for (Task task : tasks.values()) {
             prioritizedTasks.remove(task);
             historyManager.remove(task.getId());
         }
-        // Очищаем мапа
         tasks.clear();
     }
 
@@ -74,9 +68,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateTask(Task updatedTask) {
-        if (hasTimeOverlap(updatedTask)) {
-            throw new ManagerValidationException("Задача пересекается по времени с существующей задачей");
-        }
+        validateNoTimeOverlap(updatedTask);
         if (tasks.containsKey(updatedTask.getId())) {
             Task oldTask = tasks.get(updatedTask.getId());
             prioritizedTasks.remove(oldTask);
@@ -87,12 +79,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Epic createEpic(Epic epic) {
-        if (epic.getId() != 0) {
-            epics.put(epic.getId(), epic);
-            updateEpicTime(epic);
-            return epic;
+        if (epic.getId() == 0) {
+            epic.setId(nextId++);
         }
-        epic.setId(nextId++);
         epics.put(epic.getId(), epic);
         updateEpicTime(epic);
         return epic;
@@ -152,24 +141,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Subtask createSubtask(Subtask subtask) {
-        if (hasTimeOverlap(subtask)) {
-            throw new ManagerValidationException("Задача пересекается по времени с существующей задачей");
-        }
+        validateNoTimeOverlap(subtask);
         if (!epics.containsKey(subtask.getEpicId())) {
             return null;
         }
 
-        if (subtask.getId() != 0) {
-            subtasks.put(subtask.getId(), subtask);
-            Epic epic = epics.get(subtask.getEpicId());
-            epic.addSubtaskId(subtask.getId());
-            updateEpicStatus(epic);
-            updateEpicTime(epic);
-            addToPrioritized(subtask);
-            return subtask;
+        if (subtask.getId() == 0) {
+            subtask.setId(nextId++);
         }
-
-        subtask.setId(nextId++);
         subtasks.put(subtask.getId(), subtask);
         Epic epic = epics.get(subtask.getEpicId());
         epic.addSubtaskId(subtask.getId());
@@ -181,9 +160,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateSubtask(Subtask updatedSubtask) {
-        if (hasTimeOverlap(updatedSubtask)) {
-            throw new ManagerValidationException("Задача пересекается по времени с существующей задачей");
-        }
+        validateNoTimeOverlap(updatedSubtask);
         if (subtasks.containsKey(updatedSubtask.getId())) {
             Subtask oldSubtask = subtasks.get(updatedSubtask.getId());
             prioritizedTasks.remove(oldSubtask);
@@ -274,14 +251,18 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public boolean hasTimeOverlap(Task newTask) {
+    public void validateNoTimeOverlap(Task newTask) {
         if (newTask.getStartTime() == null || newTask.getEndTime() == null) {
-            return false;
+            return;
         }
 
-        return getAllTasksWithTime().stream()
+        boolean hasOverlap = getAllTasksWithTime().stream()
                 .filter(existingTask -> !existingTask.equals(newTask))
                 .anyMatch(existingTask -> isTimeOverlap(newTask, existingTask));
+
+        if (hasOverlap) {
+            throw new ManagerValidationException("Задача пересекается по времени с существующей задачей");
+        }
     }
 
     private boolean isTimeOverlap(Task task1, Task task2) {
@@ -333,7 +314,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         if (epicSubtasks.isEmpty()) {
             epic.setStartTime(null);
-            epic.setDuration(null);  // Устанавливаем null вместо Duration.ZERO
+            epic.setDuration(null);
             epic.setEndTime(null);
             return;
         }

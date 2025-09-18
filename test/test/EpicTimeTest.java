@@ -38,18 +38,19 @@ class EpicTimeTest {
         manager.createSubtask(subtask2);
 
         Epic savedEpic = manager.getEpic(epic.getId());
-        assertNotNull(savedEpic.getStartTime());
-        assertNotNull(savedEpic.getDuration());
-        assertNotNull(savedEpic.getEndTime());
-        assertTrue(savedEpic.getDuration().toMinutes() > 0);
+
+        // Проверяем конкретные значения вместо assertNotNull
+        assertEquals(now.plusHours(1), savedEpic.getStartTime(), "StartTime должен быть равен времени начала самой ранней подзадачи");
+        assertEquals(Duration.ofMinutes(75), savedEpic.getDuration(), "Duration должен быть суммой продолжительностей подзадач");
+        assertEquals(now.plusHours(2).plusMinutes(45), savedEpic.getEndTime(), "EndTime должен быть равен времени окончания самой поздней подзадачи");
     }
 
     @Test
     void testEpicTimeWithNoSubtasks() {
         Epic savedEpic = manager.getEpic(epic.getId());
 
-        assertNull(savedEpic.getStartTime());
-        assertNull(savedEpic.getDuration());
-        assertNull(savedEpic.getEndTime());
+        assertNull(savedEpic.getStartTime(), "StartTime эпика без подзадач должен быть null");
+        assertNull(savedEpic.getDuration(), "Duration эпика без подзадач должен быть null");
+        assertNull(savedEpic.getEndTime(), "EndTime эпика без подзадач должен быть null");
     }
 }

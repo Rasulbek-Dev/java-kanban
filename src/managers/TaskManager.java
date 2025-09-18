@@ -50,5 +50,5 @@ public interface TaskManager {
 
     List<Task> getPrioritizedTasks();
 
-    boolean hasTimeOverlap(Task task);
+    void validateNoTimeOverlap(Task task); // Заменен boolean hasTimeOverlap(Task task)
 }
