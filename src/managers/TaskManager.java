@@ -14,6 +14,8 @@ public interface TaskManager {
 
     void deleteTask(int id);
 
+    void deleteAllTasks();
+
     Task getTask(int id);
 
     void updateTask(Task task);
@@ -24,15 +26,29 @@ public interface TaskManager {
 
     void deleteEpic(int id);
 
+    void deleteAllEpics();
+
     Epic getEpic(int id);
+
+    void updateEpic(Epic epic);
 
     Subtask createSubtask(Subtask subtask);
 
     void updateSubtask(Subtask subtask);
 
+    void deleteSubtask(int id);
+
+    void deleteAllSubtasks();
+
     List<Subtask> getSubtasksByEpic(int epicId);
+
+    List<Subtask> getAllSubtasks();
 
     Subtask getSubtask(int id);
 
     List<Task> getHistory();
+
+    List<Task> getPrioritizedTasks();
+
+    void validateNoTimeOverlap(Task task); // Заменен boolean hasTimeOverlap(Task task)
 }
