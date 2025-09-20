@@ -54,6 +54,8 @@ public class CsvFormat {
                 Epic epic = new Epic(name, description);
                 epic.setId(id);
                 epic.setStatus(status);
+                epic.setDuration(duration);
+                epic.setStartTime(startTime);
                 return epic;
             case SUBTASK:
                 if (fields.length < 8) {

@@ -1,7 +1,6 @@
 package model;
 
 import managers.TaskType;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -19,12 +18,16 @@ public class Task {
         this.title = "";
         this.description = "";
         this.taskStatus = TaskStatus.NEW;
+        this.duration = null;
+        this.startTime = null;
     }
 
     public Task(String title, String description) {
         this.title = title;
         this.description = description;
         this.taskStatus = TaskStatus.NEW;
+        this.duration = null;
+        this.startTime = null;
     }
 
     public Task(String title, String description, TaskStatus status, Duration duration, LocalDateTime startTime) {
@@ -52,6 +55,7 @@ public class Task {
         this.duration = other.duration;
         this.startTime = other.startTime;
     }
+
 
     // Геттеры и сеттеры
     public int getId() {
