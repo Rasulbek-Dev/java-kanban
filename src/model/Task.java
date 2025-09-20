@@ -54,19 +54,57 @@ public class Task {
     }
 
     // Геттеры и сеттеры
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-    public TaskStatus getStatus() { return taskStatus; }
-    public void setStatus(TaskStatus taskStatus) { this.taskStatus = taskStatus; }
-    public TaskType getType() { return TaskType.TASK; }
-    public Duration getDuration() { return duration; }
-    public void setDuration(Duration duration) { this.duration = duration; }
-    public LocalDateTime getStartTime() { return startTime; }
-    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public TaskStatus getStatus() {
+        return taskStatus;
+    }
+
+    public void setStatus(TaskStatus taskStatus) {
+        this.taskStatus = taskStatus;
+    }
+
+    public TaskType getType() {
+        return TaskType.TASK;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
 
     public LocalDateTime getEndTime() {
         if (startTime != null && duration != null) {
@@ -77,8 +115,12 @@ public class Task {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Task task = (Task) o;
         return id == task.id;
     }
@@ -90,12 +132,12 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", status=" + taskStatus +
-                ", duration=" + (duration != null ? duration.toMinutes() : "null") +
-                ", startTime=" + startTime +
-                '}';
+        return "Task{id=" + id
+                + ", title='" + title + '\''
+                + ", description='" + description + '\''
+                + ", status=" + taskStatus
+                + ", duration=" + (duration != null ? duration.toMinutes() : "null")
+                + ", startTime=" + startTime
+                + '}';
     }
 }
