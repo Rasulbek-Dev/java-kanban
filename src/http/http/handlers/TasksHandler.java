@@ -4,12 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import managers.TaskManager;
 import managers.ManagerValidationException;
+import managers.TaskManager;
 import model.Task;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -87,12 +89,12 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
         try {
             Task task = gson.fromJson(body, Task.class);
 
-            // Убедимся, что поля duration и startTime установлены (даже если они null)
+            // Убедимся, что поля duration и startTime установлены
             if (task.getDuration() == null) {
-                task.setDuration(null);
+                task.setDuration(Duration.ofMinutes(5));
             }
             if (task.getStartTime() == null) {
-                task.setStartTime(null);
+                task.setStartTime(LocalDateTime.now());
             }
             if (task.getStatus() == null) {
                 task.setStatus(model.TaskStatus.NEW);
