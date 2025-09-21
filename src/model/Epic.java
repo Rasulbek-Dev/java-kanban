@@ -1,7 +1,6 @@
 package model;
 
 import managers.TaskType;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,13 +10,16 @@ public class Epic extends Task {
     private List<Integer> subtaskIds = new ArrayList<>();
     private LocalDateTime endTime;
 
-    public Epic(String title, String description) {
-        super(title, description);
-        this.endTime = null;
+    // Конструктор по умолчанию для Gson
+    public Epic() {
+        super();
     }
 
-    public Epic(int id, String title, String description, TaskStatus status,
-                Duration duration, LocalDateTime startTime, LocalDateTime endTime) {
+    public Epic(String title, String description) {
+        super(title, description);
+    }
+
+    public Epic(int id, String title, String description, TaskStatus status, Duration duration, LocalDateTime startTime, LocalDateTime endTime) {
         super(id, title, description, status, duration, startTime);
         this.endTime = endTime;
     }
@@ -35,6 +37,10 @@ public class Epic extends Task {
 
     public List<Integer> getSubtaskIds() {
         return subtaskIds;
+    }
+
+    public void setSubtaskIds(List<Integer> subtaskIds) {
+        this.subtaskIds = subtaskIds;
     }
 
     public void addSubtaskId(int id) {

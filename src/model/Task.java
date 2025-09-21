@@ -1,7 +1,6 @@
 package model;
 
 import managers.TaskType;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -14,16 +13,32 @@ public class Task {
     protected Duration duration;
     protected LocalDateTime startTime;
 
+    // Конструктор по умолчанию для Gson
+    public Task() {
+        this.title = "";
+        this.description = "";
+        this.taskStatus = TaskStatus.NEW;
+        this.duration = null;
+        this.startTime = null;
+    }
+
     public Task(String title, String description) {
         this.title = title;
         this.description = description;
         this.taskStatus = TaskStatus.NEW;
-        this.duration = Duration.ofMinutes(5);
-        this.startTime = LocalDateTime.now();
+        this.duration = null;
+        this.startTime = null;
     }
 
-    public Task(int id, String title, String description, TaskStatus status,
-                Duration duration, LocalDateTime startTime) {
+    public Task(String title, String description, TaskStatus status, Duration duration, LocalDateTime startTime) {
+        this.title = title;
+        this.description = description;
+        this.taskStatus = status;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
+
+    public Task(int id, String title, String description, TaskStatus status, Duration duration, LocalDateTime startTime) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -41,6 +56,8 @@ public class Task {
         this.startTime = other.startTime;
     }
 
+
+    // Геттеры и сеттеры
     public int getId() {
         return id;
     }
@@ -101,20 +118,13 @@ public class Task {
     }
 
     @Override
-    public String toString() {
-        return "Task{id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", status=" + taskStatus +
-                ", duration=" + (duration != null ? duration.toMinutes() : "null") +
-                ", startTime=" + startTime +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Task task = (Task) o;
         return id == task.id;
     }
@@ -122,5 +132,16 @@ public class Task {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Task{id=" + id
+                + ", title='" + title + '\''
+                + ", description='" + description + '\''
+                + ", status=" + taskStatus
+                + ", duration=" + (duration != null ? duration.toMinutes() : "null")
+                + ", startTime=" + startTime
+                + '}';
     }
 }

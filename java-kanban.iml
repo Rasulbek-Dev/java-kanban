@@ -44,5 +44,6 @@
     </orderEntry>
     <orderEntry type="library" name="JUnit 5.13.4 source code (1)" level="project" />
     <orderEntry type="library" name="junit-platform-console-standalone-1.13.4" level="project" />
+    <orderEntry type="library" name="gson-2.10.1" level="project" />
   </component>
 </module>

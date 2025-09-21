@@ -9,8 +9,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
@@ -19,10 +17,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    private void save() {
+    protected void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(CsvFormat.getHeader() + "\n");
 
+            // Сохраняем задачи всех типов
             for (Task task : getAllTasks()) {
                 writer.write(CsvFormat.toString(task) + "\n");
             }
@@ -32,35 +31,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             for (Subtask subtask : getAllSubtasks()) {
                 writer.write(CsvFormat.toString(subtask) + "\n");
             }
-
-            writer.write("\n");
-            writer.write(historyToString(getHistory()));
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка сохранения", e);
         }
-    }
-
-    private String historyToString(List<Task> history) {
-        if (history.isEmpty()) {
-            return "";
-        }
-        StringBuilder sb = new StringBuilder();
-        for (Task task : history) {
-            sb.append(task.getId()).append(",");
-        }
-        sb.deleteCharAt(sb.length() - 1);
-        return sb.toString();
-    }
-
-    private List<Integer> historyFromString(String value) {
-        List<Integer> historyIds = new ArrayList<>();
-        if (value != null && !value.isBlank()) {
-            String[] ids = value.split(",");
-            for (String id : ids) {
-                historyIds.add(Integer.parseInt(id.trim()));
-            }
-        }
-        return historyIds;
     }
 
     public static FileBackedTaskManager loadFromFile(File file) {
@@ -72,16 +45,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
             if (lines.length <= 1) return manager;
 
-            int emptyLineIndex = -1;
-            for (int i = 0; i < lines.length; i++) {
-                if (lines[i].isBlank()) {
-                    emptyLineIndex = i;
-                    break;
-                }
-            }
-
             int maxId = 0;
-            for (int i = 1; i < emptyLineIndex; i++) {
+            for (int i = 1; i < lines.length; i++) {
                 if (lines[i].isBlank()) continue;
                 try {
                     Task task = CsvFormat.fromString(lines[i]);
@@ -89,16 +54,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         maxId = task.getId();
                     }
                     if (task instanceof Epic) {
-                        manager.epics.put(task.getId(), (Epic) task);
+                        manager.createEpic((Epic) task);
                     } else if (task instanceof Subtask) {
-                        manager.subtasks.put(task.getId(), (Subtask) task);
-                        Subtask subtask = (Subtask) task;
-                        Epic epic = manager.epics.get(subtask.getEpicId());
-                        if (epic != null) {
-                            epic.addSubtaskId(subtask.getId());
-                        }
+                        manager.createSubtask((Subtask) task);
                     } else {
-                        manager.tasks.put(task.getId(), task);
+                        manager.createTask(task);
                     }
                 } catch (Exception e) {
                     throw new ManagerSaveException("Ошибка загрузки: повреждённая строка \"" + lines[i] + "\"", e);
@@ -106,23 +66,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
             InMemoryTaskManager.nextId = maxId + 1;
 
+            // После загрузки всех задач обновляем статусы эпиков
             manager.updateAllEpics();
-
-            if (emptyLineIndex != -1 && emptyLineIndex + 1 < lines.length) {
-                String historyLine = lines[emptyLineIndex + 1];
-                if (!historyLine.isBlank()) {
-                    List<Integer> historyIds = manager.historyFromString(historyLine);
-                    for (Integer id : historyIds) {
-                        Task task = manager.tasks.get(id);
-                        if (task == null) task = manager.epics.get(id);
-                        if (task == null) task = manager.subtasks.get(id);
-                        if (task != null) {
-                            manager.historyManager.add(task);
-                        }
-                    }
-                }
-            }
-
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка чтения файла", e);
         }
